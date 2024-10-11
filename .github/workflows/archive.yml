@@ -1,0 +1,30 @@
+name: Upload to Archive.org
+on: push
+
+jobs:
+  job:
+    name: Upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          pip install internetarchive
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create bundle
+        run: git bundle create british_transit_addon_lowres-${{ github.sha }}.bundle --all
+
+      - name: Upload file to archive.org
+        if: github.ref == 'refs/heads/main'
+        run: |
+          ia configure -u ${{ secrets.IA_USER }} -p ${{ secrets.IA_PWD }}
+          ia upload british_transit_addon_lowres-${{ github.sha }} british_transit_addon_lowres-${{ github.sha }}.bundle --metadata="mediatype:software" --metadata="creator:Octagon Development" --metadata="creator:Dash" --metadata="title:british_transit_addon_lowres-${{ github.sha }}" --metadata="scanner:British Transit Addon Auto-Archive" --metadata="collection:open_source_software" --metadata="subject:Minecraft;mod;forge;fabric;mappings;octagon development;dash;mtr;transit;addon;minecraft transit railway;low-res;resources;pack" --metadata="originalurl:https://github.com/british-transport-addon/BTA-low-res-packs" --retries 20
