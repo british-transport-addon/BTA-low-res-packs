@@ -1,0 +1,11 @@
+pack_directory = '256x'
+output_file_path = 'BTA-low-res-1.0.0-alpha.7-256x.zip'
+recompress_compressed_files = true
+allow_mods = ['Minecraft Transit Railway 3']
+never_store_squash_times = true
+
+['assets/mtr/**/*.png']
+force_include = true
+
+['assets/mtrsteamloco/**/*.png']
+force_include = true
